@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import ContactList from './ContqctList/ContactList';
-import ContactForm from 'ContactForm';
+import ContactForm from 'components/ContactForm';
 import shortid from 'shortid';
 import Filter from './Filter';
 
@@ -16,6 +16,22 @@ class App extends Component {
     ],
     filter: '',
   };
+
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts')
+    const parsedContacts = JSON.parse(contacts)
+    
+    if(parsedContacts) {
+      this.setState({contacts: parsedContacts})
+    }
+  }
+  
+  componentDidUpdate(_, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
+    }
+    
+  }
 
   formSubmitHandler = data => {
     const contactNames = this.state.contacts.map(contact => contact.name);
